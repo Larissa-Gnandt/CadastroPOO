@@ -1,0 +1,15 @@
+# Arquivos compilados
+bin/
+*.class
+
+# Arquivos de persistência
+*.bin
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.iml 
