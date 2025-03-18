@@ -4,7 +4,7 @@ Sistema de cadastro de clientes em modo texto, com persistência em arquivos, de
 
 ## Descrição
 
-Este projeto implementa um sistema de cadastro de clientes que permite gerenciar pessoas físicas e jurídicas. O sistema utiliza conceitos de Programação Orientada a Objetos como herança, polimorfismo e persistência de dados em arquivos binários.
+Este projeto implementa um sistema de cadastro de clientes que permite gerenciar pessoas físicas e jurídicas. O sistema utiliza conceitos de **Programação Orientada a Objetos** como **herança**, **polimorfismo** e **persistência de dados em arquivos binários**.
 
 ## Funcionalidades
 
@@ -23,6 +23,7 @@ src/
 ├── main/
 │   └── java/
 │       ├── Main.java
+│       ├── TesteRepositorios.java
 │       └── model/
 │           ├── Pessoa.java
 │           ├── PessoaFisica.java
@@ -53,14 +54,14 @@ src/
 
 O sistema apresenta um menu interativo com as seguintes opções:
 
-1. Incluir - Adiciona uma nova pessoa física ou jurídica
-2. Alterar - Modifica os dados de uma pessoa existente
-3. Excluir - Remove uma pessoa do cadastro
-4. Exibir por ID - Consulta uma pessoa específica
-5. Exibir todos - Lista todas as pessoas cadastradas
-6. Salvar dados - Persiste os dados em arquivos binários
-7. Recuperar dados - Carrega os dados dos arquivos binários
-8. Finalizar - Encerra o programa
+1. **Incluir** - Adiciona uma nova pessoa física ou jurídica
+2. **Alterar** - Modifica os dados de uma pessoa existente
+3. **Excluir** - Remove uma pessoa do cadastro
+4. **Exibir por ID** - Consulta uma pessoa específica
+5. **Exibir todos** - Lista todas as pessoas cadastradas
+6. **Salvar dados** - Persiste os dados em arquivos binários
+7. **Recuperar dados** - Carrega os dados dos arquivos binários
+8. **Finalizar** - Encerra o programa
 
 ## Persistência de Dados
 

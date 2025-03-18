@@ -16,7 +16,7 @@ public class Main {
         do {
             exibirMenu();
             opcao = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine();
 
             try {
                 processarOpcao(opcao);
@@ -223,4 +223,4 @@ public class Main {
         repoJuridica.recuperar(prefixo + ".juridica.bin");
         System.out.println("Dados recuperados com sucesso!");
     }
-} 
+}

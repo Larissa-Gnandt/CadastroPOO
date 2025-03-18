@@ -1,6 +1,8 @@
 # Arquivos compilados
 bin/
+target/
 *.class
+*.jar
 
 # Arquivos de persistência
 *.bin
@@ -12,4 +14,12 @@ Thumbs.db
 # Arquivos de IDE
 .idea/
 .vscode/
-*.iml 
+*.iml
+.project
+.classpath
+.settings/
+
+# Arquivos temporários
+*.tmp
+*.temp
+*~ 
