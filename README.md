@@ -70,6 +70,29 @@ Os dados são salvos em arquivos binários com os seguintes formatos:
 - `[prefixo].fisica.bin` - Arquivo para pessoas físicas
 - `[prefixo].juridica.bin` - Arquivo para pessoas jurídicas
 
+## Banco de Dados
+
+O sistema utiliza MySQL para persistência dos dados. O script SQL com a estrutura do banco de dados está disponível na pasta `sql/`.
+
+### Configuração do Banco de Dados
+
+1. Certifique-se de ter o MySQL instalado e rodando
+2. Acesse a pasta `sql/` do projeto
+3. Execute o script SQL para criar as tabelas necessárias:
+   ```bash
+   mysql -u seu_usuario -p < schema.sql
+   ```
+
+### Estrutura do Banco de Dados
+
+O banco de dados contém as seguintes tabelas:
+- `Usuario` - Armazena dados de usuários do sistema (login, senha, perfil)
+- `Pessoa` - Tabela base com informações comuns a todos os tipos de pessoas
+- `PessoaFisica` - Armazena dados específicos de pessoas físicas
+- `PessoaJuridica` - Armazena dados específicos de pessoas jurídicas
+- `Produto` - Cadastro de produtos disponíveis no sistema
+- `Movimento` - Registra as operações realizadas no sistema
+
 ## Tecnologias Utilizadas
 
 - Java 17
