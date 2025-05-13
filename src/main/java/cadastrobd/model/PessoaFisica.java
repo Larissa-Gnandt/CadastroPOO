@@ -1,0 +1,53 @@
+package cadastrobd.model;
+
+public class PessoaFisica extends Pessoa {
+    private String cpf;
+
+    public PessoaFisica() {
+        super();
+    }
+
+    public PessoaFisica(int id, String nome, String logradouro, String cidade, String estado, String telefone,
+            String email, String cpf) {
+        super(id, nome, logradouro, cidade, estado, telefone, email);
+        this.cpf = cpf;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    @Override
+    public void exibir() {
+        super.exibir();
+        System.out.println("CPF: " + cpf);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
