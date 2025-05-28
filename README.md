@@ -17,37 +17,30 @@ Este projeto implementa um sistema de cadastro de pessoas físicas e jurídicas,
 ## Estrutura do Projeto
 
 ```
-src/
-├── main/
-│   └── java/
-│       ├── CadastroBDTeste.java
-│       └── cadastrobd/
-│           └── model/
-│               ├── Pessoa.java
-│               ├── PessoaFisica.java
-│               ├── PessoaJuridica.java
-│               ├── PessoaFisicaDAO.java
-│               ├── PessoaJuridicaDAO.java
-│               └── util/
-│                   └── ConectorBD.java
+CadastroBD/
+├── CadastroEE-ear/   # Módulo EAR (empacotamento)
+├── CadastroEE-ejb/   # Módulo EJB (lógica de negócio, JPA)
+└── CadastroEE-web/   # Módulo Web (Servlets, JSP, Bootstrap)
 ```
 
 ## Requisitos
 
-- Java JDK 17 ou superior
+- Java 8 ou superior
 - Maven
 - MySQL Server
+- GlassFish 5.x ou 6.x (compatível com Jakarta EE 8)
 
 ## Como Executar
 
 1. Clone o repositório
 2. Navegue até o diretório do projeto
 3. Certifique-se de que o banco de dados MySQL está rodando e configurado conforme o arquivo `schema.sql`
-4. Atualize as credenciais de acesso ao banco no arquivo `ConectorBD.java` se necessário
-5. Execute o comando abaixo para compilar e rodar o sistema com o menu interativo:
+4. Atualize as credenciais de acesso ao banco no arquivo `persistence.xml` se necessário
+5. Execute o comando abaixo para compilar e empacotar o projeto:
    ```bash
-   mvn compile exec:java -Dexec.mainClass="CadastroBDTeste"
+   mvn clean install
    ```
+6. Faça o deploy do arquivo EAR gerado no GlassFish (via admin console ou CLI)
 
 ## Uso do Sistema
 
@@ -76,7 +69,7 @@ O sistema utiliza MySQL para persistência dos dados. O script SQL com a estrutu
    ```bash
    mysql -u seu_usuario -p < schema.sql
    ```
-4. Atualize as credenciais de acesso ao banco no arquivo `ConectorBD.java` do projeto, se necessário.
+4. Atualize as credenciais de acesso ao banco no arquivo `persistence.xml` do projeto, se necessário.
 
 ### Estrutura do Banco de Dados
 
@@ -90,8 +83,9 @@ O banco de dados contém as seguintes tabelas:
 
 ## Tecnologias Utilizadas
 
-- Java 17
+- Java 8+
 - Maven
 - MySQL
-- Programação Orientada a Objetos
-- Padrão DAO
+- Jakarta EE 8 (JPA, EJB, Servlet, JSP)
+- GlassFish
+- Bootstrap
