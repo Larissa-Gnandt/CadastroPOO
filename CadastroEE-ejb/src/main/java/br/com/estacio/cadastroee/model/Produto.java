@@ -42,6 +42,10 @@ public class Produto implements Serializable {
     @Column(name = "precoVenda")
     private Float precoVenda;
 
+    @Basic(optional = false)
+    @Column(name = "deletado")
+    private boolean deletado = false;
+
     public Produto() {
     }
 
@@ -86,6 +90,14 @@ public class Produto implements Serializable {
 
     public void setPrecoVenda(Float precoVenda) {
         this.precoVenda = precoVenda;
+    }
+
+    public boolean isDeletado() {
+        return deletado;
+    }
+
+    public void setDeletado(boolean deletado) {
+        this.deletado = deletado;
     }
 
     @Override

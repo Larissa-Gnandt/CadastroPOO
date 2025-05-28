@@ -18,4 +18,17 @@ public class ProdutoFacade extends AbstractFacade<Produto> implements ProdutoFac
     public ProdutoFacade() {
         super(Produto.class);
     }
+
+    @Override
+    public void remove(Produto entity) {
+        entity = getEntityManager().merge(entity);
+        entity.setDeletado(true);
+        getEntityManager().merge(entity);
+    }
+
+    @Override
+    public java.util.List<Produto> findAll() {
+        return getEntityManager().createQuery("SELECT p FROM Produto p WHERE p.deletado = false", Produto.class)
+                .getResultList();
+    }
 }
