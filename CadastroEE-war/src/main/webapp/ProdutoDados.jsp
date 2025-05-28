@@ -18,7 +18,7 @@
                 <form action="ServletProdutoFC" method="POST" class="form">
                     <input type="hidden" name="acao" value="<%= acao%>">
                     <% if (produto !=null) { %>
-                        <input type="hidden" name="id" value="<%= produto.getId()%>">
+                        <input type="hidden" name="id" value="<%= produto.getIdProduto()%>">
                         <% } %>
 
                             <div class="mb-3">

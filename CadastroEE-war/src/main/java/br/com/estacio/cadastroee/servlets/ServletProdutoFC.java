@@ -51,7 +51,7 @@ public class ServletProdutoFC extends HttpServlet {
 
                 case "alterar":
                     Produto produtoAlterado = new Produto();
-                    produtoAlterado.setId(Integer.parseInt(request.getParameter("id")));
+                    produtoAlterado.setIdProduto(Integer.parseInt(request.getParameter("id")));
                     produtoAlterado.setNome(request.getParameter("nome"));
                     produtoAlterado.setQuantidade(Integer.parseInt(request.getParameter("quantidade")));
                     produtoAlterado.setPrecoVenda(Float.parseFloat(request.getParameter("precoVenda")));

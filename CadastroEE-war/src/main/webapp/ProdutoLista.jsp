@@ -32,7 +32,7 @@
                                 %>
                                 <tr>
                                     <td>
-                                        <%= p.getId()%>
+                                        <%= p.getIdProduto()%>
                                     </td>
                                     <td>
                                         <%= p.getNome()%>
@@ -44,9 +44,9 @@
                                         <%= p.getPrecoVenda()%>
                                     </td>
                                     <td>
-                                        <a href="ServletProdutoFC?acao=formAlterar&id=<%= p.getId()%>"
+                                        <a href="ServletProdutoFC?acao=formAlterar&id=<%= p.getIdProduto()%>"
                                             class="btn btn-primary btn-sm">Alterar</a>
-                                        <a href="ServletProdutoFC?acao=excluir&id=<%= p.getId()%>"
+                                        <a href="ServletProdutoFC?acao=excluir&id=<%= p.getIdProduto()%>"
                                             class="btn btn-danger btn-sm">Excluir</a>
                                     </td>
                                 </tr>

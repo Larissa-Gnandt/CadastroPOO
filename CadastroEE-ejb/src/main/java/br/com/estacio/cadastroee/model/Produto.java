@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 @Table(name = "produto")
 @NamedQueries({
         @NamedQuery(name = "Produto.findAll", query = "SELECT p FROM Produto p"),
-        @NamedQuery(name = "Produto.findById", query = "SELECT p FROM Produto p WHERE p.id = :id"),
+        @NamedQuery(name = "Produto.findById", query = "SELECT p FROM Produto p WHERE p.idProduto = :idProduto"),
         @NamedQuery(name = "Produto.findByNome", query = "SELECT p FROM Produto p WHERE p.nome = :nome"),
         @NamedQuery(name = "Produto.findByQuantidade", query = "SELECT p FROM Produto p WHERE p.quantidade = :quantidade"),
         @NamedQuery(name = "Produto.findByPrecoVenda", query = "SELECT p FROM Produto p WHERE p.precoVenda = :precoVenda")
@@ -27,8 +27,8 @@ public class Produto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "idProduto")
+    private Integer idProduto;
 
     @Basic(optional = false)
     @Column(name = "nome")
@@ -45,23 +45,23 @@ public class Produto implements Serializable {
     public Produto() {
     }
 
-    public Produto(Integer id) {
-        this.id = id;
+    public Produto(Integer idProduto) {
+        this.idProduto = idProduto;
     }
 
-    public Produto(Integer id, String nome, Integer quantidade, Float precoVenda) {
-        this.id = id;
+    public Produto(Integer idProduto, String nome, Integer quantidade, Float precoVenda) {
+        this.idProduto = idProduto;
         this.nome = nome;
         this.quantidade = quantidade;
         this.precoVenda = precoVenda;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdProduto() {
+        return idProduto;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdProduto(Integer idProduto) {
+        this.idProduto = idProduto;
     }
 
     public String getNome() {
@@ -91,7 +91,7 @@ public class Produto implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (idProduto != null ? idProduto.hashCode() : 0);
         return hash;
     }
 
@@ -101,7 +101,8 @@ public class Produto implements Serializable {
             return false;
         }
         Produto other = (Produto) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.idProduto == null && other.idProduto != null)
+                || (this.idProduto != null && !this.idProduto.equals(other.idProduto))) {
             return false;
         }
         return true;
@@ -109,6 +110,6 @@ public class Produto implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.estacio.cadastroee.model.Produto[ id=" + id + " ]";
+        return "br.com.estacio.cadastroee.model.Produto[ idProduto=" + idProduto + " ]";
     }
 }

@@ -35,7 +35,7 @@ public class ServletProduto extends HttpServlet {
             List<Produto> produtos = facade.findAll();
             for (Produto p : produtos) {
                 out.println("<tr>");
-                out.println("<td>" + p.getId() + "</td>");
+                out.println("<td>" + p.getIdProduto() + "</td>");
                 out.println("<td>" + p.getNome() + "</td>");
                 out.println("<td>" + p.getQuantidade() + "</td>");
                 out.println("<td>" + p.getPrecoVenda() + "</td>");
