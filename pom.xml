@@ -13,6 +13,7 @@
         <module>CadastroEE-ejb</module>
         <module>CadastroEE-war</module>
         <module>CadastroEE-ear</module>
+        <module>CadastroServer</module>
     </modules>
 
     <properties>
