@@ -15,6 +15,11 @@ public class UsuarioJpaController {
         em = emf.createEntityManager();
     }
 
+    public UsuarioJpaController(EntityManagerFactory emf) {
+        this.emf = emf;
+        this.em = emf.createEntityManager();
+    }
+
     public Usuario findUsuario(String login, String senha) {
         try {
             Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.login = :login AND u.senha = :senha");

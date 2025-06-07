@@ -2,15 +2,17 @@ package br.com.estacio.client;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
+import br.com.estacio.server.model.Produto;
 
 public class CadastroClient {
     private static final String SERVER_HOST = "localhost";
-    private static final int SERVER_PORT = 12345;
+    private static final int SERVER_PORT = 4321;
 
     public static void main(String[] args) {
         try (Socket socket = new Socket(SERVER_HOST, SERVER_PORT);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
                 BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
 
             System.out.println("Conectado ao servidor!");
@@ -21,14 +23,14 @@ public class CadastroClient {
             System.out.print("Senha: ");
             String senha = userInput.readLine();
 
-            out.println(login);
-            out.println(senha);
+            out.writeObject(login);
+            out.writeObject(senha);
 
             // Recebe resposta da autenticação
-            String response = in.readLine();
+            String response = (String) in.readObject();
             System.out.println("Resposta do servidor: " + response);
 
-            if (!response.startsWith("OK")) {
+            if (!response.equals("OK")) {
                 System.out.println("Falha na autenticação. Encerrando...");
                 return;
             }
@@ -45,26 +47,24 @@ public class CadastroClient {
                     break;
                 }
 
-                out.println(comando);
+                out.writeObject(comando);
 
-                if (comando.equals("L") || comando.equals("LISTAR_PRODUTOS")) {
-                    int numProdutos = Integer.parseInt(in.readLine());
-                    System.out.println("\nProdutos encontrados: " + numProdutos);
-                    for (int i = 0; i < numProdutos; i++) {
-                        String produto = in.readLine();
-                        String[] partes = produto.split(",");
-                        // partes[0] = id, partes[1] = nome, partes[2] = quantidade, partes[3] = preco
-                        System.out.printf("ID: %s, Nome: %s, Preço: R$ %.2f\n",
-                                partes[0], partes[1], Double.parseDouble(partes[3]));
+                if (comando.equals("L")) {
+                    List<Produto> produtos = (List<Produto>) in.readObject();
+                    System.out.println("\nProdutos encontrados: " + produtos.size());
+                    for (Produto produto : produtos) {
+                        System.out.printf("ID: %d, Nome: %s, Preço: R$ %.2f\n",
+                                produto.getIdProduto(), produto.getNome(), produto.getPrecoVenda());
                     }
                 } else {
-                    response = in.readLine();
+                    response = (String) in.readObject();
                     System.out.println("Resposta do servidor: " + response);
                 }
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Erro na comunicação com o servidor: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

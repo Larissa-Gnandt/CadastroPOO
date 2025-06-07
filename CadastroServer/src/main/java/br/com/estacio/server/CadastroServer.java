@@ -1,105 +1,31 @@
 package br.com.estacio.server;
 
+import br.com.estacio.server.controller.ProdutoJpaController;
 import br.com.estacio.server.controller.UsuarioJpaController;
-import java.io.*;
-import java.net.*;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class CadastroServer {
-    private static final int PORT = 12345;
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
-    private static final String DB_USER = "Larissa";
-    private static final String DB_PASSWORD = "123";
-
     public static void main(String[] args) {
+        final int PORT = 4321;
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CadastroServerPU");
+        ProdutoJpaController ctrl = new ProdutoJpaController(emf);
+        UsuarioJpaController ctrlUsu = new UsuarioJpaController(emf);
+
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Servidor iniciado na porta " + PORT);
-
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
-
-                new Thread(() -> handleClient(clientSocket)).start();
+                CadastroThread thread = new CadastroThread(ctrl, ctrlUsu, clientSocket);
+                thread.start();
             }
-        } catch (IOException e) {
-            System.err.println("Erro ao iniciar o servidor: " + e.getMessage());
-        }
-    }
-
-    private static void handleClient(Socket clientSocket) {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-
-            // Recebe login e senha
-            String login = in.readLine();
-            String senha = in.readLine();
-
-            // Valida credenciais
-            if (validarCredenciais(login, senha)) {
-                out.println("OK");
-
-                // Loop principal
-                while (true) {
-                    String comando = in.readLine();
-                    if (comando == null || comando.equals("SAIR")) {
-                        break;
-                    }
-
-                    switch (comando.toUpperCase()) {
-                        case "L":
-                            List<String> produtos = listarProdutos();
-                            out.println(produtos.size());
-                            for (String produto : produtos) {
-                                out.println(produto);
-                            }
-                            break;
-                        default:
-                            out.println("Comando inválido");
-                    }
-                }
-            } else {
-                out.println("ERRO: Credenciais inválidas");
-            }
-        } catch (IOException e) {
-            System.err.println("Erro ao lidar com cliente: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                System.err.println("Erro ao fechar socket: " + e.getMessage());
-            }
+            emf.close();
         }
-    }
-
-    private static boolean validarCredenciais(String login, String senha) {
-        UsuarioJpaController controller = new UsuarioJpaController();
-        try {
-            return controller.findUsuario(login, senha) != null;
-        } finally {
-            controller.close();
-        }
-    }
-
-    private static List<String> listarProdutos() {
-        List<String> produtos = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "SELECT idProduto, nome, quantidade, precoVenda FROM Produto WHERE deletado = 0";
-            try (Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery(sql)) {
-                while (rs.next()) {
-                    String produto = String.format("%d,%s,%d,%.2f",
-                            rs.getInt("idProduto"),
-                            rs.getString("nome"),
-                            rs.getInt("quantidade"),
-                            rs.getDouble("precoVenda"));
-                    produtos.add(produto);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao listar produtos: " + e.getMessage());
-        }
-        return produtos;
     }
 }
