@@ -47,14 +47,15 @@ public class CadastroClient {
 
                 out.println(comando);
 
-                if (comando.equals("L")) {
+                if (comando.equals("L") || comando.equals("LISTAR_PRODUTOS")) {
                     int numProdutos = Integer.parseInt(in.readLine());
                     System.out.println("\nProdutos encontrados: " + numProdutos);
                     for (int i = 0; i < numProdutos; i++) {
                         String produto = in.readLine();
                         String[] partes = produto.split(",");
-                        System.out.printf("ID: %s, Nome: %s, Preço: R$ %.2f%n",
-                                partes[0], partes[1], Double.parseDouble(partes[2]));
+                        // partes[0] = id, partes[1] = nome, partes[2] = quantidade, partes[3] = preco
+                        System.out.printf("ID: %s, Nome: %s, Preço: R$ %.2f\n",
+                                partes[0], partes[1], Double.parseDouble(partes[3]));
                     }
                 } else {
                     response = in.readLine();

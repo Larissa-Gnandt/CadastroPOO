@@ -1,5 +1,6 @@
 package br.com.estacio.server;
 
+import br.com.estacio.server.controller.UsuarioJpaController;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
@@ -34,61 +35,51 @@ public class CadastroServer {
             // Recebe login e senha
             String login = in.readLine();
             String senha = in.readLine();
-            System.out.println("Login recebido: [" + login + "] Senha recebida: [" + senha + "]");
 
             // Valida credenciais
-            if (!validarCredenciais(login, senha)) {
-                out.println("ERRO: Credenciais inválidas");
-                return;
-            }
+            if (validarCredenciais(login, senha)) {
+                out.println("OK");
 
-            out.println("OK: Credenciais válidas");
-
-            // Loop principal de processamento
-            while (true) {
-                String comando = in.readLine();
-                if (comando == null)
-                    break;
-
-                switch (comando.toUpperCase()) {
-                    case "L":
-                        List<String> produtos = listarProdutos();
-                        out.println(produtos.size());
-                        for (String produto : produtos) {
-                            out.println(produto);
-                        }
+                // Loop principal
+                while (true) {
+                    String comando = in.readLine();
+                    if (comando == null || comando.equals("SAIR")) {
                         break;
-                    default:
-                        out.println("ERRO: Comando inválido");
+                    }
+
+                    switch (comando.toUpperCase()) {
+                        case "L":
+                            List<String> produtos = listarProdutos();
+                            out.println(produtos.size());
+                            for (String produto : produtos) {
+                                out.println(produto);
+                            }
+                            break;
+                        default:
+                            out.println("Comando inválido");
+                    }
                 }
+            } else {
+                out.println("ERRO: Credenciais inválidas");
             }
         } catch (IOException e) {
-            System.err.println("Erro na comunicação com o cliente: " + e.getMessage());
+            System.err.println("Erro ao lidar com cliente: " + e.getMessage());
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                System.err.println("Erro ao fechar conexão com o cliente: " + e.getMessage());
+                System.err.println("Erro ao fechar socket: " + e.getMessage());
             }
         }
     }
 
     private static boolean validarCredenciais(String login, String senha) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "SELECT COUNT(*) FROM Usuario WHERE login = ? AND senha = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, login);
-                stmt.setString(2, senha);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getInt(1) > 0;
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao validar credenciais: " + e.getMessage());
+        UsuarioJpaController controller = new UsuarioJpaController();
+        try {
+            return controller.findUsuario(login, senha) != null;
+        } finally {
+            controller.close();
         }
-        return false;
     }
 
     private static List<String> listarProdutos() {
