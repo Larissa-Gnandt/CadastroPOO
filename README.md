@@ -1,91 +1,89 @@
-# CadastroPOO
+# CadastroBD
 
-Sistema de cadastro de pessoas físicas e jurídicas em modo texto, com persistência em banco de dados MySQL, desenvolvido em Java.
+Sistema de cadastro e movimentação de produtos, pessoas e usuários, com comunicação cliente-servidor em Java, persistência em MySQL e interface gráfica para mensagens.
 
 ## Descrição
 
-Este projeto implementa um sistema de cadastro de pessoas físicas e jurídicas, utilizando conceitos de **Programação Orientada a Objetos** como **herança** e **polimorfismo**. O sistema realiza a persistência dos dados diretamente em um banco de dados MySQL, utilizando o padrão DAO (Data Access Object).
+Este projeto implementa um sistema de cadastro e movimentação de produtos, pessoas físicas e jurídicas, utilizando **Java**, **JPA (EclipseLink)** e **MySQL**. A comunicação entre cliente e servidor é feita via **sockets TCP**, com autenticação, listagem, entrada e saída de produtos, e interface gráfica Swing para exibição de mensagens.
 
 ## Funcionalidades
 
-- Cadastro de pessoas físicas e jurídicas
-- Alteração de cadastros existentes
-- Exclusão de cadastros
-- Consulta por ID
-- Listagem de todos os cadastros
+- Autenticação de usuários
+- Listagem de produtos (apenas não deletados)
+- Entrada e saída de produtos (movimentação)
+- Atualização automática da quantidade de produtos
+- Registro de movimentos (entradas/saídas)
+- Interface gráfica Swing para exibição de mensagens e listas
+- Cliente assíncrono (recebe mensagens do servidor em tempo real)
 
 ## Estrutura do Projeto
 
 ```
 CadastroBD/
-├── CadastroEE-ear/   # Módulo EAR (empacotamento)
-├── CadastroEE-ejb/   # Módulo EJB (lógica de negócio, JPA)
-└── CadastroEE-web/   # Módulo Web (Servlets, JSP, Bootstrap)
+├── CadastroServer/      # Módulo principal (servidor e clientes)
+│   ├── src/main/java/br/com/estacio/server/   # Servidor, threads e controladores
+│   ├── src/main/java/br/com/estacio/client/   # Clientes (console e assíncrono)
+│   ├── src/main/resources/META-INF/persistence.xml
+│   └── sql/                                 # Scripts SQL para banco de dados
 ```
 
 ## Requisitos
 
-- Java 8 ou superior
+- Java 17 ou superior
 - Maven
 - MySQL Server
-- GlassFish 5.x ou 6.x (compatível com Jakarta EE 8)
 
 ## Como Executar
 
-1. Clone o repositório
-2. Navegue até o diretório do projeto
-3. Certifique-se de que o banco de dados MySQL está rodando e configurado conforme o arquivo `schema.sql`
-4. Atualize as credenciais de acesso ao banco no arquivo `persistence.xml` se necessário
-5. Execute o comando abaixo para compilar e empacotar o projeto:
-   ```bash
-   mvn clean install
+1. **Clone o repositório**
+2. **Configure o banco de dados MySQL**  
+   - Crie o banco e as tabelas usando o script `sql/schema.sql`
+   - Insira dados de teste (usuário `op1`/`op1` e produtos)
+3. **Atualize as credenciais no arquivo `persistence.xml`** se necessário
+4. **Compile o projeto:**
+   ```sh
+   cd CadastroServer
+   mvn clean package
    ```
-6. Faça o deploy do arquivo EAR gerado no GlassFish (via admin console ou CLI)
+5. **Execute o servidor:**
+   ```sh
+   java -jar target/CadastroServer-1.0-SNAPSHOT-jar-with-dependencies.jar
+   ```
+6. **Em outro terminal, execute o cliente assíncrono:**
+   ```sh
+   java -cp target/classes br.com.estacio.client.CadastroClientV2
+   ```
 
 ## Uso do Sistema
 
-O sistema apresenta um menu interativo com as seguintes opções:
+- **Login:**  
+  Use o usuário de teste:  
+  - Login: `op1`  
+  - Senha: `op1`
 
-1. **Incluir** - Adiciona uma nova pessoa física ou jurídica
-2. **Alterar** - Modifica os dados de uma pessoa existente
-3. **Excluir** - Remove uma pessoa do cadastro
-4. **Exibir por id** - Consulta uma pessoa específica
-5. **Exibir todos** - Lista todas as pessoas cadastradas
-0. **Sair** - Encerra o programa
+- **Menu de comandos (no console):**
+  - `L` – Listar produtos
+  - `E` – Entrada de produto
+  - `S` – Saída de produto
+  - `X` – Sair
 
-## Persistência de Dados
-
-A persistência dos dados é realizada diretamente em um banco de dados MySQL, utilizando o padrão DAO (Data Access Object) para todas as operações de cadastro, alteração, exclusão e consulta.
+- **As mensagens e listas do servidor aparecem na janela Swing "Saída do Servidor".**
 
 ## Banco de Dados
 
-O sistema utiliza MySQL para persistência dos dados. O script SQL com a estrutura do banco de dados está disponível no arquivo `schema.sql` na raiz do projeto (ou na pasta `sql/`, se preferir organizar assim).
-
-### Configuração do Banco de Dados
-
-1. Certifique-se de ter o MySQL instalado e rodando.
-2. No terminal, navegue até a pasta onde está o arquivo `schema.sql`.
-3. Execute o script SQL para criar as tabelas necessárias:
-   ```bash
-   mysql -u seu_usuario -p < schema.sql
-   ```
-4. Atualize as credenciais de acesso ao banco no arquivo `persistence.xml` do projeto, se necessário.
-
-### Estrutura do Banco de Dados
-
-O banco de dados contém as seguintes tabelas:
-- `Usuario` - Armazena dados de usuários do sistema (login, senha, perfil)
-- `Pessoa` - Tabela base com informações comuns a todos os tipos de pessoas
-- `PessoaFisica` - Armazena dados específicos de pessoas físicas (CPF)
-- `PessoaJuridica` - Armazena dados específicos de pessoas jurídicas (CNPJ)
-- `Produto` - Cadastro de produtos disponíveis no sistema
-- `Movimento` - Registra as operações realizadas no sistema
+- Scripts para criação das tabelas: `sql/schema.sql`
+- Estrutura das tabelas: `Usuario`, `Pessoa`, `PessoaFisica`, `PessoaJuridica`, `Produto`, `Movimento`
+- Exemplo de inserção de usuário e produtos no banco:
+  ```sql
+  INSERT INTO Usuario (login, senha) VALUES ('op1', 'op1');
+  INSERT INTO Produto (nome, quantidade, precoVenda, deletado) VALUES ('Laranja', 300, 2.00, 0);
+  ```
 
 ## Tecnologias Utilizadas
 
-- Java 8+
+- Java 17+
 - Maven
 - MySQL
-- Jakarta EE 8 (JPA, EJB, Servlet, JSP)
-- GlassFish
-- Bootstrap
+- Jakarta Persistence (JPA) com EclipseLink
+- Sockets TCP
+- Swing (interface gráfica para mensagens)
