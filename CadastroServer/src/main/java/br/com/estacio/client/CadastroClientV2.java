@@ -2,8 +2,6 @@ package br.com.estacio.client;
 
 import java.io.*;
 import java.net.*;
-import javax.swing.*;
-import java.awt.*;
 
 public class CadastroClientV2 {
     public static void main(String[] args) {
@@ -47,7 +45,6 @@ public class CadastroClientV2 {
                 if (comando.equals("X"))
                     break;
                 if (comando.equals("L")) {
-                    // Receber e exibir lista de produtos (implementar depois)
                 } else if (comando.equals("E") || comando.equals("S")) {
                     // Entrada/Saída de produto
                     System.out.print("Id da pessoa: ");
@@ -62,7 +59,6 @@ public class CadastroClientV2 {
                     out.writeObject(idProduto);
                     out.writeObject(quantidade);
                     out.writeObject(valorUnitario);
-                    // Receber resposta do servidor (implementar depois)
                 }
             }
         } catch (Exception e) {
