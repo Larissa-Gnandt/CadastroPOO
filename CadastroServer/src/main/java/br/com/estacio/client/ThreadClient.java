@@ -24,7 +24,6 @@ public class ThreadClient extends Thread {
                 } else if (obj instanceof List) {
                     List<?> lista = (List<?>) obj;
                     for (Object item : lista) {
-                        // Supondo que seja Produto
                         try {
                             var metodoGetNome = item.getClass().getMethod("getNome");
                             var metodoGetQuantidade = item.getClass().getMethod("getQuantidade");
@@ -33,7 +32,6 @@ public class ThreadClient extends Thread {
                             String linha = String.format("Produto: %s, Quantidade: %d", nome, qtd);
                             SwingUtilities.invokeLater(() -> textArea.append(linha + "\n"));
                         } catch (Exception e) {
-                            // Ignora se não for Produto
                         }
                     }
                 }
