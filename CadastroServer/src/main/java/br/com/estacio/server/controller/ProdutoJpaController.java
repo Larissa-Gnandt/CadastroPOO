@@ -24,4 +24,24 @@ public class ProdutoJpaController {
             em.close();
         }
     }
+
+    public Produto findProduto(int idProduto) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Produto.class, idProduto);
+        } finally {
+            em.close();
+        }
+    }
+
+    public void updateProduto(Produto produto) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(produto);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
 }
